@@ -55,3 +55,33 @@ test('AC7: a tester transitioning a Fixed defect to Reopened records the new sta
   const updated = transitionDefect(defect, 'Reopened', tester);
   assert.equal(updated.status, 'Reopened');
 });
+
+test('an unassigned developer sees no transitions on any status', () => {
+  const statuses: Defect['status'][] = ['Open', 'Fixed', 'Closed', 'Reopened'];
+  for (const status of statuses) {
+    const defect: Defect = { id: `d-unassigned-${status}`, status, assigneeId: null };
+    assert.deepEqual(availableTransitions(defect, developer), []);
+  }
+});
+
+test('a developer assigned to a Fixed or Closed defect sees no transitions', () => {
+  const fixedDefect: Defect = { id: 'd-dev-fixed', status: 'Fixed', assigneeId: developer.id };
+  const closedDefect: Defect = { id: 'd-dev-closed', status: 'Closed', assigneeId: developer.id };
+  assert.deepEqual(availableTransitions(fixedDefect, developer), []);
+  assert.deepEqual(availableTransitions(closedDefect, developer), []);
+});
+
+test('transitionDefect throws when a tester attempts a disallowed transition', () => {
+  const defect: Defect = { id: 'd-err-1', status: 'Open', assigneeId: null };
+  assert.throws(() => transitionDefect(defect, 'Closed', tester));
+});
+
+test('transitionDefect throws when an unassigned developer attempts a transition', () => {
+  const defect: Defect = { id: 'd-err-2', status: 'Open', assigneeId: null };
+  assert.throws(() => transitionDefect(defect, 'Fixed', developer));
+});
+
+test('transitionDefect throws when a manager attempts any transition', () => {
+  const defect: Defect = { id: 'd-err-3', status: 'Open', assigneeId: null };
+  assert.throws(() => transitionDefect(defect, 'Fixed', manager));
+});
