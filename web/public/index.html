@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Defect List</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 2rem;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 0.5rem;
+        text-align: left;
+      }
+      th {
+        cursor: pointer;
+        background: #f2f2f2;
+      }
+      .filters {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Defects</h1>
+    <form class="filters" id="filters-form">
+      <label>
+        Status
+        <select data-field="status" id="status-filter">
+          <option value="">All</option>
+          <option value="Open">Open</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Resolved">Resolved</option>
+          <option value="Closed">Closed</option>
+        </select>
+      </label>
+      <label>
+        Severity
+        <select data-field="severity" id="severity-filter">
+          <option value="">All</option>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+          <option value="Critical">Critical</option>
+        </select>
+      </label>
+      <label>
+        Module
+        <select data-field="module" id="module-filter">
+          <option value="">All</option>
+          <option value="Authentication">Authentication</option>
+          <option value="Checkout">Checkout</option>
+          <option value="Search">Search</option>
+          <option value="Profile">Profile</option>
+        </select>
+      </label>
+      <label>
+        Search title
+        <input type="search" id="search-input" placeholder="Search by title" />
+      </label>
+    </form>
+    <div id="defect-list"></div>
+    <script src="/src/utils/sortDefects.js"></script>
+    <script src="/src/utils/sortState.js"></script>
+    <script src="/src/api/buildDefectsQuery.js"></script>
+    <script src="/src/api/defectsApi.js"></script>
+    <script src="/src/render/renderDefectTable.js"></script>
+    <script src="/src/pages/defectListController.js"></script>
+    <script src="/main.js"></script>
+  </body>
+</html>
