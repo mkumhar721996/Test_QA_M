@@ -2,6 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { createDefectService } = require('../../src/services/defectService');
 const { DefectStatus } = require('../../src/domain/defect');
+const { canTransitionToFixed } = require('../../src/domain/transitions');
 
 function validInput(overrides = {}) {
   return {
@@ -38,4 +39,19 @@ test('transitionToFixed: succeeds when a developer is assigned', () => {
   assert.equal(result.success, true);
   assert.equal(result.defect.status, DefectStatus.FIXED);
   assert.equal(service.getDefect(defect.id).status, DefectStatus.FIXED);
+});
+
+test('transitionToFixed: unknown defect id is distinguishable from a missing developer', () => {
+  const service = createDefectService();
+
+  const result = service.transitionToFixed('does-not-exist');
+
+  assert.equal(result.success, false);
+  assert.equal(result.reason, 'NOT_FOUND');
+  assert.notEqual(result.reason, 'DEVELOPER_REQUIRED');
+});
+
+test('canTransitionToFixed: a non-string assignedDeveloper is treated as unassigned, not a crash', () => {
+  assert.equal(canTransitionToFixed({ assignedDeveloper: 123 }), false);
+  assert.equal(canTransitionToFixed({}), false);
 });

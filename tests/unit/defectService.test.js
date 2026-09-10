@@ -58,9 +58,30 @@ test('updateAssignedDeveloper: updates the assignee on a saved defect', () => {
   const service = createDefectService();
   const { defect } = service.createDefect(validInput());
 
-  const updated = service.updateAssignedDeveloper(defect.id, 'Jane Doe');
-  assert.equal(updated.assignedDeveloper, 'Jane Doe');
+  const result = service.updateAssignedDeveloper(defect.id, 'Jane Doe');
+  assert.equal(result.success, true);
+  assert.equal(result.defect.assignedDeveloper, 'Jane Doe');
 
   const fetched = service.getDefect(defect.id);
   assert.equal(fetched.assignedDeveloper, 'Jane Doe');
+});
+
+test('updateAssignedDeveloper: unknown defect id is reported as not found', () => {
+  const service = createDefectService();
+
+  const result = service.updateAssignedDeveloper('does-not-exist', 'Jane Doe');
+
+  assert.equal(result.success, false);
+  assert.equal(result.reason, 'NOT_FOUND');
+});
+
+test('updateAssignedDeveloper: rejects a non-string value without crashing', () => {
+  const service = createDefectService();
+  const { defect } = service.createDefect(validInput());
+
+  const result = service.updateAssignedDeveloper(defect.id, 123);
+
+  assert.equal(result.success, false);
+  assert.equal(result.reason, 'INVALID_INPUT');
+  assert.equal(service.getDefect(defect.id).assignedDeveloper, undefined);
 });

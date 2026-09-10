@@ -61,7 +61,27 @@ test('validateDefectInput: assignedDeveloper is optional (blank/omitted is valid
   assert.equal(blank.valid, true);
   assert.equal(blank.errors.assignedDeveloper, undefined);
 
-  const omitted = validateDefectInput(validInput());
-  delete omitted.assignedDeveloper;
+  const input = validInput();
+  delete input.assignedDeveloper;
+  const omitted = validateDefectInput(input);
   assert.equal(omitted.valid, true);
+  assert.equal(omitted.errors.assignedDeveloper, undefined);
+});
+
+test('validateDefectInput: assignedDeveloper must be a string when provided', () => {
+  const result = validateDefectInput(validInput({ assignedDeveloper: 123 }));
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.assignedDeveloper);
+});
+
+test('validateDefectInput: null input is rejected without throwing', () => {
+  assert.doesNotThrow(() => validateDefectInput(null));
+  const result = validateDefectInput(null);
+  assert.equal(result.valid, false);
+});
+
+test('validateDefectInput: non-object input is rejected without throwing', () => {
+  assert.doesNotThrow(() => validateDefectInput('not an object'));
+  const result = validateDefectInput('not an object');
+  assert.equal(result.valid, false);
 });

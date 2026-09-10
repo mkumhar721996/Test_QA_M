@@ -93,3 +93,41 @@ test('PATCH /defects/:id/assigned-developer updates the displayed assignee', asy
     assert.equal(getJson.assignedDeveloper, 'Jane Doe');
   });
 });
+
+test('POST /defects/:id/transitions-to-fixed for an unknown defect returns 404, not 409', async (t) => {
+  await withServer(t, async (baseUrl) => {
+    const res = await fetch(`${baseUrl}/defects/does-not-exist/transitions-to-fixed`, { method: 'POST' });
+    const json = await res.json();
+
+    assert.equal(res.status, 404);
+    assert.equal(json.message, 'Defect not found');
+  });
+});
+
+test('PATCH /defects/:id/assigned-developer with a non-string value returns 400', async (t) => {
+  await withServer(t, async (baseUrl) => {
+    const created = await postJson(`${baseUrl}/defects`, validInput());
+    const res = await fetch(`${baseUrl}/defects/${created.json.id}/assigned-developer`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ assignedDeveloper: 123 }),
+    });
+    const json = await res.json();
+
+    assert.equal(res.status, 400);
+    assert.ok(json.message);
+  });
+});
+
+test('POST /defects with an oversized body is rejected (413) instead of exhausting memory', async (t) => {
+  await withServer(t, async (baseUrl) => {
+    const oversizedDescription = 'x'.repeat(2 * 1024 * 1024);
+    const res = await fetch(`${baseUrl}/defects`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(validInput({ description: oversizedDescription })),
+    });
+
+    assert.equal(res.status, 413);
+  });
+});

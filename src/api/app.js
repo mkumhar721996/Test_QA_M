@@ -1,13 +1,32 @@
 const http = require('node:http');
 const { createDefectService } = require('../services/defectService');
 
-function readJsonBody(req) {
+const MAX_BODY_BYTES = 1024 * 1024; // 1MB
+
+class PayloadTooLargeError extends Error {}
+class InvalidJsonBodyError extends Error {}
+
+function readJsonBody(req, maxBytes = MAX_BODY_BYTES) {
   return new Promise((resolve, reject) => {
     let raw = '';
+    let bytes = 0;
+    let rejected = false;
     req.on('data', (chunk) => {
+      if (rejected) {
+        return;
+      }
+      bytes += chunk.length;
+      if (bytes > maxBytes) {
+        rejected = true;
+        reject(new PayloadTooLargeError('Request body exceeds the maximum allowed size'));
+        return;
+      }
       raw += chunk;
     });
     req.on('end', () => {
+      if (rejected) {
+        return;
+      }
       if (!raw) {
         resolve({});
         return;
@@ -15,7 +34,7 @@ function readJsonBody(req) {
       try {
         resolve(JSON.parse(raw));
       } catch {
-        reject(new Error('Invalid JSON body'));
+        reject(new InvalidJsonBodyError('Invalid JSON body'));
       }
     });
     req.on('error', reject);
@@ -28,8 +47,33 @@ function sendJson(res, statusCode, payload) {
   res.end(body);
 }
 
+function logRequestError(req, err) {
+  console.error(JSON.stringify({
+    level: 'error',
+    method: req.method,
+    path: req.url,
+    message: err.message,
+    stack: err.stack,
+  }));
+}
+
+function logRequestMetric(req, res, startedAt) {
+  const durationMs = Number(process.hrtime.bigint() - startedAt) / 1e6;
+  console.log(JSON.stringify({
+    level: 'info',
+    type: 'request_metric',
+    method: req.method,
+    path: req.url,
+    statusCode: res.statusCode,
+    durationMs: Math.round(durationMs * 100) / 100,
+  }));
+}
+
 function createApp(service = createDefectService()) {
   return http.createServer(async (req, res) => {
+    const startedAt = process.hrtime.bigint();
+    res.on('finish', () => logRequestMetric(req, res, startedAt));
+
     const url = new URL(req.url, 'http://localhost');
     const segments = url.pathname.split('/').filter(Boolean);
 
@@ -63,7 +107,8 @@ function createApp(service = createDefectService()) {
       ) {
         const result = service.transitionToFixed(segments[1]);
         if (!result.success) {
-          sendJson(res, 409, { message: result.message });
+          const status = result.reason === 'NOT_FOUND' ? 404 : 409;
+          sendJson(res, status, { message: result.message });
           return;
         }
         sendJson(res, 200, result.defect);
@@ -77,18 +122,30 @@ function createApp(service = createDefectService()) {
         segments[2] === 'assigned-developer'
       ) {
         const body = await readJsonBody(req);
-        const updated = service.updateAssignedDeveloper(segments[1], body.assignedDeveloper);
-        if (!updated) {
-          sendJson(res, 404, { message: 'Defect not found' });
+        const result = service.updateAssignedDeveloper(segments[1], body.assignedDeveloper);
+        if (!result.success) {
+          const status = result.reason === 'NOT_FOUND' ? 404 : 400;
+          sendJson(res, status, { message: result.message });
           return;
         }
-        sendJson(res, 200, updated);
+        sendJson(res, 200, result.defect);
         return;
       }
 
       sendJson(res, 404, { message: 'Not found' });
     } catch (err) {
-      sendJson(res, 400, { message: err.message });
+      if (err instanceof PayloadTooLargeError) {
+        logRequestError(req, err);
+        sendJson(res, 413, { message: err.message });
+        return;
+      }
+      if (err instanceof InvalidJsonBodyError) {
+        logRequestError(req, err);
+        sendJson(res, 400, { message: err.message });
+        return;
+      }
+      logRequestError(req, err);
+      sendJson(res, 500, { message: 'Internal Server Error' });
     }
   });
 }
