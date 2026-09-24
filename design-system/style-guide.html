@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design System Style Guide</title>
+  <link rel="stylesheet" href="tokens.css" />
+  <link rel="stylesheet" href="prototype-utils.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: var(--space-4);
+      background-color: var(--color-bg);
+      color: var(--color-fg);
+      font-family: var(--font-family-base);
+      line-height: var(--line-height-base);
+    }
+    section {
+      margin-bottom: var(--space-4);
+    }
+    h1 {
+      font-size: calc(var(--font-size-lg) * 1.4);
+    }
+    h2 {
+      font-size: var(--font-size-lg);
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: var(--space-1);
+    }
+    .swatch-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+    .swatch {
+      width: 140px;
+    }
+    .swatch-color {
+      height: 64px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+    }
+    .swatch-label {
+      font-size: var(--font-size-sm);
+      margin-top: var(--space-1);
+    }
+    .dimension-bar {
+      background-color: var(--color-primary);
+      height: 8px;
+    }
+    .row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-2);
+    }
+    .row-label {
+      width: 140px;
+      font-size: var(--font-size-sm);
+    }
+    .component-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+    .form-example {
+      max-width: 320px;
+    }
+    .type-sample {
+      margin-bottom: var(--space-2);
+    }
+  </style>
+</head>
+<body>
+  <h1>Design System Style Guide</h1>
+
+  <section>
+    <h2>Colors</h2>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background-color: var(--color-fg);"></div>
+        <div class="swatch-label">color-fg</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background-color: var(--color-bg);"></div>
+        <div class="swatch-label">color-bg</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background-color: var(--color-primary);"></div>
+        <div class="swatch-label">color-primary</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background-color: var(--color-border);"></div>
+        <div class="swatch-label">color-border</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Spacing</h2>
+    <div class="row">
+      <div class="row-label">space-1</div>
+      <div class="dimension-bar" style="width: var(--space-1);"></div>
+    </div>
+    <div class="row">
+      <div class="row-label">space-2</div>
+      <div class="dimension-bar" style="width: var(--space-2);"></div>
+    </div>
+    <div class="row">
+      <div class="row-label">space-3</div>
+      <div class="dimension-bar" style="width: var(--space-3);"></div>
+    </div>
+    <div class="row">
+      <div class="row-label">space-4</div>
+      <div class="dimension-bar" style="width: var(--space-4);"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Radii</h2>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background-color: var(--color-primary); border-radius: var(--radius-sm);"></div>
+        <div class="swatch-label">radius-sm</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background-color: var(--color-primary); border-radius: var(--radius-md);"></div>
+        <div class="swatch-label">radius-md</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background-color: var(--color-primary); border-radius: var(--radius-lg);"></div>
+        <div class="swatch-label">radius-lg</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Type scale</h2>
+    <div class="type-sample" style="font-size: var(--font-size-sm);">font-size-sm — The quick brown fox jumps over the lazy dog</div>
+    <div class="type-sample" style="font-size: var(--font-size-md);">font-size-md — The quick brown fox jumps over the lazy dog</div>
+    <div class="type-sample" style="font-size: var(--font-size-lg);">font-size-lg — The quick brown fox jumps over the lazy dog</div>
+    <div class="type-sample" style="font-weight: var(--font-weight-regular);">font-weight-regular — Regular weight text</div>
+    <div class="type-sample" style="font-weight: var(--font-weight-bold);">font-weight-bold — Bold weight text</div>
+    <div class="type-sample">font-family-base — <span style="font-family: var(--font-family-base);">Inter, system-ui, sans-serif</span></div>
+  </section>
+
+  <section>
+    <h2>Shadow</h2>
+    <div class="swatch">
+      <div class="swatch-color" style="background-color: var(--color-bg); box-shadow: var(--shadow-sm);"></div>
+      <div class="swatch-label">shadow-sm</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Buttons</h2>
+    <div class="component-row">
+      <button class="btn btn-primary">Primary button</button>
+      <button class="btn btn-secondary">Secondary button</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Card</h2>
+    <div class="component-row">
+      <div class="card" style="max-width: 320px;">
+        <h3 class="card-title">Card title</h3>
+        <p class="card-body">This is a card body demonstrating card.default tokens for background, foreground, border, and radius.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Chips</h2>
+    <div class="component-row">
+      <span class="chip">Default chip</span>
+      <span class="chip">Another chip</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Form controls</h2>
+    <div class="form-example">
+      <label class="label" for="example-input">Label</label>
+      <input class="input" id="example-input" type="text" placeholder="Placeholder text" />
+    </div>
+  </section>
+</body>
+</html>

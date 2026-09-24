@@ -1,0 +1,37 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --color-fg: #1a1a1a; /** Default body text color on light backgrounds. */
+  --color-bg: #ffffff; /** Default page/surface background color. */
+  --color-primary: #2563eb; /** Brand accent color used for primary actions. */
+  --color-border: #d1d5db; /** Default hairline border color for surfaces and controls. */
+  --space-1: 4px; /** Smallest spacing increment, used for tight gaps. */
+  --space-2: 8px; /** Base spacing unit, used for control padding. */
+  --space-3: 16px; /** Medium spacing, used between grouped elements. */
+  --space-4: 24px; /** Large spacing, used for section/card padding. */
+  --radius-sm: 4px; /** Corner radius for small controls like chips and inputs. */
+  --radius-md: 8px; /** Corner radius for buttons. */
+  --radius-lg: 16px; /** Corner radius for cards and large surfaces. */
+  --font-size-sm: 12px; /** Small text, used for chips and helper text. */
+  --font-size-md: 16px; /** Body text size, used for buttons and form controls. */
+  --font-size-lg: 20px; /** Heading text size, used for card titles. */
+  --font-family-base: Inter, system-ui, sans-serif; /** Default typeface stack for all UI text. */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700; /** Used for headings and emphasized labels like button text. */
+  --line-height-base: 1.5; /** Unitless line-height multiplier for body text. */
+  --shadow-sm: 0px 2px 8px 0px rgb(10.2% 10.2% 10.2% / 0.12); /** Subtle elevation shadow used on cards. */
+  --button-primary-background: var(--color-primary); /** Primary button fill. */
+  --button-primary-foreground: var(--color-bg); /** Primary button label color. */
+  --button-primary-border: var(--color-primary); /** Primary button border color. */
+  --button-primary-radius: var(--radius-md); /** Primary button corner radius. */
+  --button-secondary-background: var(--color-bg); /** Secondary button fill. */
+  --button-secondary-foreground: var(--color-primary); /** Secondary button label color. */
+  --button-secondary-border: var(--color-primary); /** Secondary button border color. */
+  --button-secondary-radius: var(--radius-md); /** Secondary button corner radius. */
+  --card-default-background: var(--color-bg); /** Card surface fill. */
+  --card-default-foreground: var(--color-fg); /** Card body text color. */
+  --card-default-border: var(--color-border); /** Card outline color. */
+  --card-default-radius: var(--radius-lg); /** Card corner radius. */
+}
