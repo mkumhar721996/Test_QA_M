@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TEST-QA-M-STORY-034 — Role-Based Record Access</title>
+<style>
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --color-fg: #1a1a1a; /** Default body text color on light backgrounds. */
+  --color-bg: #ffffff; /** Default page/surface background color. */
+  --color-primary: #2563eb; /** Brand accent color used for primary actions. */
+  --color-border: #d1d5db; /** Default hairline border color for surfaces and controls. */
+  --space-1: 4px; /** Smallest spacing increment, used for tight gaps. */
+  --space-2: 8px; /** Base spacing unit, used for control padding. */
+  --space-3: 16px; /** Medium spacing, used between grouped elements. */
+  --space-4: 24px; /** Large spacing, used for section/card padding. */
+  --radius-sm: 4px; /** Corner radius for small controls like chips and inputs. */
+  --radius-md: 8px; /** Corner radius for buttons. */
+  --radius-lg: 16px; /** Corner radius for cards and large surfaces. */
+  --font-size-sm: 12px; /** Small text, used for chips and helper text. */
+  --font-size-md: 16px; /** Body text size, used for buttons and form controls. */
+  --font-size-lg: 20px; /** Heading text size, used for card titles. */
+  --font-family-base: Inter, system-ui, sans-serif; /** Default typeface stack for all UI text. */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700; /** Used for headings and emphasized labels like button text. */
+  --line-height-base: 1.5; /** Unitless line-height multiplier for body text. */
+  --shadow-sm: 0px 2px 8px 0px rgb(10.2% 10.2% 10.2% / 0.12); /** Subtle elevation shadow used on cards. */
+  --button-primary-background: var(--color-primary); /** Primary button fill. */
+  --button-primary-foreground: var(--color-bg); /** Primary button label color. */
+  --button-primary-border: var(--color-primary); /** Primary button border color. */
+  --button-primary-radius: var(--radius-md); /** Primary button corner radius. */
+  --button-secondary-background: var(--color-bg); /** Secondary button fill. */
+  --button-secondary-foreground: var(--color-primary); /** Secondary button label color. */
+  --button-secondary-border: var(--color-primary); /** Secondary button border color. */
+  --button-secondary-radius: var(--radius-md); /** Secondary button corner radius. */
+  --card-default-background: var(--color-bg); /** Card surface fill. */
+  --card-default-foreground: var(--color-fg); /** Card body text color. */
+  --card-default-border: var(--color-border); /** Card outline color. */
+  --card-default-radius: var(--radius-lg); /** Card corner radius. */
+}
+
+</style>
+<style>
+/* Base */
+
+.ds-text {
+  color: var(--color-fg);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-base);
+}
+
+/* Buttons */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  border-width: 1px;
+  border-style: solid;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--button-primary-background);
+  color: var(--button-primary-foreground);
+  border-color: var(--button-primary-border);
+  border-radius: var(--button-primary-radius);
+}
+
+.btn-secondary {
+  background-color: var(--button-secondary-background);
+  color: var(--button-secondary-foreground);
+  border-color: var(--button-secondary-border);
+  border-radius: var(--button-secondary-radius);
+}
+
+/* Card */
+
+.card {
+  background-color: var(--card-default-background);
+  color: var(--card-default-foreground);
+  border: 1px solid var(--card-default-border);
+  border-radius: var(--card-default-radius);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-family-base);
+}
+
+.card-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.card-body {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-base);
+  margin: 0;
+}
+
+/* Chip */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-fg);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+/* Form controls */
+
+.input {
+  display: block;
+  width: 100%;
+  padding: var(--space-2);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  color: var(--color-fg);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.input:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: var(--space-1);
+}
+
+.label {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-fg);
+}
+
+</style>
+<style>
+  /*
+    App nav: left sidebar — Employee Directory · Audit Log · Access Rules — with a slim top
+    header for a "Viewing as" role switcher. This mirrors the project's standard pattern (left
+    sidebar with three persistent, pivot-between objects; slim header reserved for
+    account/workspace switching) adapted to this story's own domain objects, since the source
+    guideline's literal labels (Test Cases / Test Runs / Reports) belong to a different product
+    surface than employee records.
+
+    No new design tokens were needed. Status/role/outcome meaning is carried by icon + text +
+    border-style (dashed for archived/blocked), not colour alone, because the token set has no
+    semantic danger/success colour — only color-fg, color-bg, color-primary and color-border.
+    Any tinted surfaces below are produced with color-mix() over those existing tokens, never a
+    literal hex value.
+  */
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--font-family-base);
+    color: var(--color-fg);
+    background-color: var(--color-bg);
+    line-height: var(--line-height-base);
+  }
+  #review-bar button {
+    color: var(--brand, var(--color-primary));
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    padding: var(--space-2);
+    min-height: 44px;
+  }
+
+  .app-shell { display: flex; min-height: calc(100vh - 46px); }
+
+  .sidebar {
+    width: 216px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--color-border);
+    padding: var(--space-3) var(--space-2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .sidebar-heading {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    opacity: .6;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    padding: 0 var(--space-2);
+    margin: 0 0 var(--space-2) 0;
+  }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--color-fg);
+    font-size: var(--font-size-md);
+    cursor: pointer;
+    min-height: 44px;
+    border: 1px solid transparent;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: var(--font-family-base);
+  }
+  .sidebar-item:hover { border-color: var(--color-border); }
+  .sidebar-item:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+  .sidebar-item.active {
+    background-color: color-mix(in srgb, var(--color-primary) 10%, var(--color-bg));
+    border-color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+  }
+  .sidebar-icon { width: 20px; text-align: center; flex-shrink: 0; }
+  .sidebar-label { white-space: nowrap; }
+
+  .main { flex: 1; min-width: 0; padding: var(--space-4); }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    flex-wrap: wrap;
+  }
+  .topbar-left { display: flex; align-items: baseline; gap: var(--space-2); }
+  .app-name { font-weight: var(--font-weight-bold); font-size: var(--font-size-md); }
+  .workspace-name { font-size: var(--font-size-sm); opacity: .65; }
+  .topbar-right { display: flex; align-items: center; gap: var(--space-2); }
+  .topbar-right .label { margin: 0; }
+  .role-select { width: auto; min-width: 170px; }
+
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .page-title { font-size: calc(var(--font-size-lg) * 1.1); font-weight: var(--font-weight-bold); margin: 0; }
+  .page-subtitle { font-size: var(--font-size-sm); opacity: .7; margin: var(--space-1) 0 0 0; max-width: 62ch; }
+
+  .lookup-card { max-width: 520px; margin-bottom: var(--space-3); }
+  .lookup-row { display: flex; gap: var(--space-2); align-items: flex-end; flex-wrap: wrap; }
+  .lookup-row > div:first-child { flex: 1; min-width: 160px; }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+  table.data-table { width: 100%; border-collapse: collapse; font-size: var(--font-size-md); }
+  table.data-table th, table.data-table td { text-align: left; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--color-border); vertical-align: middle; }
+  table.data-table th { font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: .03em; opacity: .65; }
+  table.data-table tbody tr:last-child td { border-bottom: none; }
+  table.matrix-table td.yes, table.matrix-table td.no, table.matrix-table th { text-align: center; }
+  table.matrix-table td:first-child, table.matrix-table th:first-child { text-align: left; }
+  th.current-role-col { border-bottom: 2px solid var(--color-primary); }
+
+  .link-action {
+    background: none; border: none; color: var(--color-primary);
+    font-family: var(--font-family-base); font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold); cursor: pointer; padding: var(--space-1);
+    min-height: 44px;
+  }
+  .link-action:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+
+  .chip--muted { border-style: dashed; opacity: .85; font-style: italic; }
+  .chip--tag { margin-left: var(--space-2); }
+
+  .skeleton-row {
+    height: 20px;
+    border-radius: var(--radius-sm);
+    background-color: color-mix(in srgb, var(--color-border) 55%, var(--color-bg));
+    margin-bottom: var(--space-2);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .skeleton-row { animation: pulse 1.1s ease-in-out infinite; }
+  }
+  @keyframes pulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+
+  .banner {
+    display: flex; gap: var(--space-2); align-items: flex-start;
+    padding: var(--space-3); border: 1px solid var(--color-border);
+    border-radius: var(--radius-md); margin-bottom: var(--space-3);
+    font-size: var(--font-size-md);
+  }
+  .banner--blocked {
+    background-color: color-mix(in srgb, var(--color-fg) 5%, var(--color-bg));
+    border-style: dashed;
+  }
+  .banner--info {
+    background-color: color-mix(in srgb, var(--color-primary) 6%, var(--color-bg));
+  }
+
+  .field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-3); margin-bottom: var(--space-3); }
+  .field-value { font-size: var(--font-size-md); }
+  .form-actions { display: flex; gap: var(--space-2); margin-top: var(--space-3); flex-wrap: wrap; }
+
+  .toast {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border);
+    border-radius: var(--radius-md); font-size: var(--font-size-sm); margin-bottom: var(--space-3);
+  }
+
+  .empty-state, .denied-state {
+    text-align: center; padding: var(--space-4);
+    border: 1px dashed var(--color-border); border-radius: var(--radius-md);
+    max-width: 520px;
+  }
+
+  @media (max-width: 960px) {
+    .sidebar { width: 60px; align-items: center; padding: var(--space-3) var(--space-1); }
+    .sidebar-label { display: none; }
+    .sidebar-heading { display: none; }
+    .sidebar-item { justify-content: center; }
+  }
+  @media (max-width: 480px) {
+    .topbar { flex-direction: column; align-items: flex-start; }
+    .lookup-row { flex-direction: column; align-items: stretch; }
+  }
+</style>
+</head>
+<body>
+
+<script type="application/json" id="fixture-data">
+{
+  "employees": [
+    { "id": "emp-001", "name": "Priya Shah", "title": "Head of People", "team": "People Ops", "email": "priya.shah@acmecorp.com", "managerId": null, "status": "Active", "band": "N/A", "startDate": "2019-03-04" },
+    { "id": "emp-010", "name": "Diego Ruiz", "title": "Engineering Manager", "team": "Engineering", "email": "diego.ruiz@acmecorp.com", "managerId": "emp-001", "status": "Active", "band": "M4", "startDate": "2020-06-15" },
+    { "id": "emp-011", "name": "Sam Okafor", "title": "Software Engineer II", "team": "Engineering", "email": "sam.okafor@acmecorp.com", "managerId": "emp-010", "status": "Active", "band": "E4", "startDate": "2022-01-10" },
+    { "id": "emp-012", "name": "Lena Fischer", "title": "Engineering Manager", "team": "Engineering", "email": "lena.fischer@acmecorp.com", "managerId": "emp-010", "status": "Active", "band": "M4", "startDate": "2021-02-01" },
+    { "id": "emp-013", "name": "Noah Kim", "title": "Software Engineer I", "team": "Engineering", "email": "noah.kim@acmecorp.com", "managerId": "emp-012", "status": "Active", "band": "E3", "startDate": "2023-05-20" },
+    { "id": "emp-014", "name": "Ana Petrova", "title": "QA Engineer", "team": "Engineering", "email": "ana.petrova@acmecorp.com", "managerId": "emp-012", "status": "Active", "band": "E3", "startDate": "2022-11-03" },
+    { "id": "emp-099", "name": "Marcus Webb", "title": "Support Engineer", "team": "Support", "email": "marcus.webb@acmecorp.com", "managerId": null, "status": "Archived", "band": "E3", "startDate": "2018-09-01" }
+  ],
+  "roles": {
+    "admin": { "userId": "emp-001", "label": "HR Admin" },
+    "manager": { "userId": "emp-010", "label": "Manager" },
+    "employee": { "userId": "emp-011", "label": "Employee" }
+  },
+  "auditLog": [
+    { "timestamp": "2026-08-12T09:14:00", "employeeId": "emp-011", "employeeName": "Sam Okafor", "field": "Team", "previousValue": "Platform", "newValue": "Engineering", "actor": "Priya Shah (HR Admin)" }
+  ]
+}
+</script>
+
+<!-- Reviewer bar -->
+<div id="review-bar" style="position:fixed;top:0;left:0;right:0;z-index:9999;
+  display:flex;align-items:center;gap:10px;padding:8px 16px;
+  background:var(--surface, var(--color-bg));border-bottom:1px solid var(--border, var(--color-border));font-size:13px;font-family:var(--font-sans, var(--font-family-base))">
+  <span style="font-family:var(--font-mono, monospace);color:var(--muted, var(--color-fg))">TEST-QA-M-STORY-034</span>
+  <button id="prev-btn">← Prev</button>
+  <span id="screen-label" style="flex:1;text-align:center;font-weight:600;color:var(--fg, var(--color-fg))"></span>
+  <button id="next-btn">Next →</button>
+</div>
+<div style="height:46px"></div><!-- spacer -->
+
+<div id="screens">
+
+  <!-- Screen: Employee Directory
+       Notes:
+         - "Viewing as" switcher in the slim top header simulates logging in as each fixture
+           user (HR Admin = Priya Shah, Manager = Diego Ruiz, Employee = Sam Okafor); every
+           screen re-scopes its data live when the role changes.
+         - Table rows are filtered entirely client-side per role: HR Admin sees all 7 records
+           incl. the archived one (AC1); Manager sees self + immediate reports only, excluding
+           reports-of-reports (AC6, AC8); Employee sees only their own row (AC4).
+         - "Open a record by ID" lets a reviewer test out-of-scope reads directly (AC7, AC8)
+           without needing a deep link.
+  -->
+  <div class="screen" data-name="Employee Directory">
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="app-name">People Ops Console</span>
+        <span class="workspace-name">Acme Corp workspace</span>
+      </div>
+      <div class="topbar-right">
+        <label class="label" for="role-select-directory" style="margin-bottom:0;">Viewing as</label>
+        <select class="input role-select" id="role-select-directory" onchange="setRole(this.value)">
+          <option value="admin">HR Admin — Priya Shah</option>
+          <option value="manager">Manager — Diego Ruiz</option>
+          <option value="employee">Employee — Sam Okafor</option>
+        </select>
+      </div>
+    </div>
+    <div class="app-shell">
+      <nav class="sidebar">
+        <p class="sidebar-heading">People Ops</p>
+        <button class="sidebar-item active" data-screen="Employee Directory" onclick="gotoScreen(this.dataset.screen)">
+          <span class="sidebar-icon">🗂️</span><span class="sidebar-label">Employee Directory</span>
+        </button>
+        <button class="sidebar-item" data-screen="Audit Log" onclick="gotoScreen(this.dataset.screen)">
+          <span class="sidebar-icon">🕘</span><span class="sidebar-label">Audit Log</span>
+        </button>
+        <button class="sidebar-item" data-screen="Access Rules" onclick="gotoScreen(this.dataset.screen)">
+          <span class="sidebar-icon">🛡️</span><span class="sidebar-label">Access Rules</span>
+        </button>
+      </nav>
+      <main class="main">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Employee directory</h1>
+            <p class="page-subtitle" id="directory-scope-note">Loading directory scope…</p>
+          </div>
+        </div>
+
+        <div class="card lookup-card">
+          <h3 class="card-title" style="font-size:var(--font-size-md);">Open a record by ID</h3>
+          <p class="card-body" style="margin-bottom:var(--space-2); font-size:var(--font-size-sm); opacity:.75;">
+            Enter an employee ID to jump straight to their record. Access is still checked against your current role.
+            Try <strong>emp-013</strong> (Noah Kim) as the Manager to see a downstream-report denial.
+          </p>
+          <div class="lookup-row">
+            <div>
+              <label class="label" for="lookup-input">Employee ID</label>
+              <input class="input" id="lookup-input" type="text" placeholder="e.g. emp-013" />
+            </div>
+            <button class="btn btn-secondary" onclick="lookupRecord()">Open record</button>
+          </div>
+        </div>
+
+        <!-- State: loading -->
+        <div id="directory-loading" style="display:none;">
+          <div class="skeleton-row" style="width:100%"></div>
+          <div class="skeleton-row" style="width:90%"></div>
+          <div class="skeleton-row" style="width:95%"></div>
+        </div>
+
+        <!-- State: success (role-scoped results) -->
+        <div id="directory-table-wrap" class="table-wrap" style="display:none;">
+          <table class="data-table">
+            <thead>
+              <tr><th>Name</th><th>Job title</th><th>Team</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody id="directory-rows"></tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Screen: Employee Record
+       Notes:
+         - Drill-in target from the Directory's "View record" links and ID lookup.
+         - Renders one of: empty (no selection yet), loading skeleton, not-found, access
+           denied, read view, HR Admin edit form, or an Employee "update rejected" view —
+           only one is visible at a time, matched to the current role and record.
+         - HR Admin save writes a new row to the Audit Log with the previous value, actor and
+           timestamp (AC2, AC3), then shows a "✓ Update saved" toast on this same screen.
+         - Employee's own record shows an enabled "Edit record" action so the rejection (AC5)
+           is something a reviewer can trigger and see, not just infer from a disabled button.
+  -->
+  <div class="screen" data-name="Employee Record">
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="app-name">People Ops Console</span>
+        <span class="workspace-name">Acme Corp workspace</span>
+      </div>
+      <div class="topbar-right">
+        <label class="label" for="role-select-record" style="margin-bottom:0;">Viewing as</label>
+        <select class="input role-select" id="role-select-record" onchange="setRole(this.value)">
+          <option value="admin">HR Admin — Priya Shah</option>
+          <option value="manager">Manager — Diego Ruiz</option>
+          <option value="employee">Employee — Sam Okafor</option>
+        </select>
+      </div>
+    </div>
+    <div class="app-shell">
+      <nav class="sidebar">
+        <p class="sidebar-heading">People Ops</p>
+        <button class="sidebar-item active" data-screen="Employee Directory" onclick="gotoScreen(this.dataset.screen)">
+          <span class="sidebar-icon">🗂️</span><span class="sidebar-label">Employee Directory</span>
+        </button>
+        <button class="sidebar-item" data-screen="Audit Log" onclick="gotoScreen(this.dataset.screen)">
+          <span class="sidebar-icon">🕘</span><span class="sidebar-label">Audit Log</span>
+        </button>
+        <button class="sidebar-item" data-screen="Access Rules" onclick="gotoScreen(this.dataset.screen)">
+          <span class="sidebar-icon">🛡️</span><span class="sidebar-label">Access Rules</span>
+        </button>
+      </nav>
+      <main class="main">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Employee record</h1>
+            <p class="page-subtitle">Viewing as <strong id="record-role-label"></strong></p>
+          </div>
+          <button class="btn btn-secondary" onclick="gotoScreen('Employee Directory')">← Back to directory</button>
+        </div>
+
+        <!-- State: no record selected -->
+        <div id="record-state-empty" class="record-state empty-state" style="display:none;">
+          <p style="font-weight:var(--font-weight-bold);">No record selected</p>
+          <p style="opacity:.7; font-size:var(--font-size-sm);">Choose an employee from the directory, or look one up by ID, to view their record here.</p>
+          <button class="btn btn-primary" onclick="gotoScreen('Employee Directory')" style="margin-top:var(--space-2);">Go to directory</button>
+        </div>
+
+        <!-- State: loading -->
+        <div id="record-state-loading" class="record-state" style="display:none;">
+          <div class="skeleton-row" style="width:60%"></div>
+          <div class="skeleton-row" style="width:100%"></div>
+          <div class="skeleton-row" style="width:100%"></div>
+        </div>
+
+        <!-- State: not found -->
+        <div id="record-state-notfound" class="record-state empty-state" style="display:none;">
+          <p style="font-weight:var(--font-weight-bold);">Record not found</p>
+          <p id="notfound-message"></p>
+          <button class="btn btn-secondary" onclick="gotoScreen('Employee Directory')" style="margin-top:var(--space-2);">Back to directory</button>
+        </div>
+
+        <!-- State: access denied -->
+        <div id="record-state-denied" class="record-state denied-state" style="display:none;">
+          <p style="font-weight:var(--font-weight-bold);">⛔ Access denied</p>
+          <p id="denied-message"></p>
+          <button class="btn btn-secondary" onclick="gotoScreen('Employee Directory')" style="margin-top:var(--space-2);">Back to directory</button>
+        </div>
+
+        <!-- State: record view (read-only, or HR Admin's editable entry point) -->
+        <div id="record-state-view" class="record-state" style="display:none;">
+          <div id="record-archived-banner" class="banner banner--blocked" style="display:none;">
+            <span aria-hidden="true">▢</span>
+            <span>This record is archived. The employee has been offboarded. HR Admins can still read and update archived records.</span>
+          </div>
+          <div id="record-toast" class="toast" style="display:none;">
+            <span aria-hidden="true">✓</span>
+            <span id="record-toast-message"></span>
+          </div>
+          <div class="card" style="max-width:640px;">
+            <h3 class="card-title" id="record-name"></h3>
+            <p class="card-body" style="opacity:.7; margin-bottom:var(--space-3); font-size:var(--font-size-sm);" id="record-id-line"></p>
+            <div class="field-grid">
+              <div><span class="label">Job title</span><div class="field-value" id="record-title"></div></div>
+              <div><span class="label">Team</span><div class="field-value" id="record-team"></div></div>
+              <div><span class="label">Compensation band</span><div class="field-value" id="record-band"></div></div>
+              <div><span class="label">Email</span><div class="field-value" id="record-email"></div></div>
+              <div><span class="label">Start date</span><div class="field-value" id="record-start"></div></div>
+              <div><span class="label">Status</span><div class="field-value" id="record-status"></div></div>
+            </div>
+            <p id="record-access-note" style="font-size:var(--font-size-sm); opacity:.75;"></p>
+            <div class="form-actions">
+              <button class="btn btn-primary" id="record-edit-btn" style="display:none;">Edit record</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- State: edit mode (HR Admin) -->
+        <div id="record-state-edit" class="record-state" style="display:none;">
+          <div class="card" style="max-width:640px;">
+            <h3 class="card-title">Edit — <span id="edit-name"></span></h3>
+            <div class="field-grid">
+              <div><label class="label" for="edit-title">Job title</label><input class="input" id="edit-title" /></div>
+              <div><label class="label" for="edit-team">Team</label><input class="input" id="edit-team" /></div>
+              <div><label class="label" for="edit-band">Compensation band</label><input class="input" id="edit-band" /></div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" id="save-btn" onclick="saveRecord()">Save changes</button>
+              <button class="btn btn-secondary" onclick="cancelEdit()">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- State: update rejected (Employee attempts to edit their own record) -->
+        <div id="record-state-rejected" class="record-state" style="display:none;">
+          <div class="banner banner--blocked">
+            <span aria-hidden="true">⛔</span>
+            <span>Update rejected — employees cannot edit their own record. Ask your HR Admin to make this change on your behalf.</span>
+          </div>
+          <div class="card" style="max-width:640px;">
+            <h3 class="card-title" id="rejected-name"></h3>
+            <div class="field-grid">
+              <div><label class="label" for="rejected-title">Job title</label><input class="input" id="rejected-title" disabled /></div>
+              <div><label class="label" for="rejected-team">Team</label><input class="input" id="rejected-team" disabled /></div>
+              <div><label class="label" for="rejected-band">Compensation band</label><input class="input" id="rejected-band" disabled /></div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-secondary" onclick="cancelEdit()">Back</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Screen: Audit Log
+       Notes:
+         - HR Admin-only view: every other role sees an explicit access-denied state rather
+           than an empty table, so the restriction reads as intentional (AC3 support).
+         - New rows appear at the top immediately after an HR Admin save on the Employee
+           Record screen — previous value, actor, and timestamp are always shown together.
+  -->
+  <div class="screen" data-name="Audit Log">
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="app-name">People Ops Console</span>
+        <span class="workspace-name">Acme Corp workspace</span>
+      </div>
+      <div class="topbar-right">
+        <label class="label" for="role-select-audit" style="margin-bottom:0;">Viewing as</label>
+        <select class="input role-select" id="role-select-audit" onchange="setRole(this.value)">
+          <option value="admin">HR Admin — Priya Shah</option>
+          <option value="manager">Manager — Diego Ruiz</option>
+          <option value="employee">Employee — Sam Okafor</option>
+        </select>
+      </div>
+    </div>
+    <div class="app-shell">
+      <nav class="sidebar">
+        <p class="sidebar-heading">People Ops</p>
+        <button class="sidebar-item" data-screen="Employee Directory" onclick="gotoScreen(this.dataset.screen)">
+          <span class="sidebar-icon">🗂️</span><span class="sidebar-label">Employee Directory</span>
+        </button>
+        <button class="sidebar-item active" data-screen="Audit Log" onclick="gotoScreen(this.dataset.screen)">
+          <span class="sidebar-icon">🕘</span><span class="sidebar-label">Audit Log</span>
+        </button>
+        <button class="sidebar-item" data-screen="Access Rules" onclick="gotoScreen(this.dataset.screen)">
+          <span class="sidebar-icon">🛡️</span><span class="sidebar-label">Access Rules</span>
+        </button>
+      </nav>
+      <main class="main">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Audit log</h1>
+            <p class="page-subtitle">Every saved update to an employee record, with the previous value, who made the change, and when.</p>
+          </div>
+        </div>
+
+        <!-- State: access denied (non-admin) -->
+        <div id="audit-denied" class="denied-state" style="display:none;">
+          <p style="font-weight:var(--font-weight-bold);">⛔ Access denied</p>
+          <p>The audit log is limited to HR Admins. Switch "Viewing as" to HR Admin to view change history.</p>
+        </div>
+
+        <!-- State: loading -->
+        <div id="audit-loading" style="display:none;">
+          <div class="skeleton-row" style="width:100%"></div>
+          <div class="skeleton-row" style="width:95%"></div>
+        </div>
+
+        <!-- State: success (entries) -->
+        <div id="audit-content" class="table-wrap" style="display:none;">
+          <table class="data-table">
+            <thead>
+              <tr><th>Timestamp</th><th>Employee</th><th>Field</th><th>Previous value</th><th>New value</th><th>Actor</th></tr>
+            </thead>
+            <tbody id="audit-rows"></tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Screen: Access Rules
+       Notes:
+         - Static reference matrix, visible to every role, summarizing exactly what the
+           acceptance criteria specify. The current "Viewing as" role's column is underlined
+           and labelled "You" so a reviewer can cross-check the switcher against the rules.
+  -->
+  <div class="screen" data-name="Access Rules">
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="app-name">People Ops Console</span>
+        <span class="workspace-name">Acme Corp workspace</span>
+      </div>
+      <div class="topbar-right">
+        <label class="label" for="role-select-rules" style="margin-bottom:0;">Viewing as</label>
+        <select class="input role-select" id="role-select-rules" onchange="setRole(this.value)">
+          <option value="admin">HR Admin — Priya Shah</option>
+          <option value="manager">Manager — Diego Ruiz</option>
+          <option value="employee">Employee — Sam Okafor</option>
+        </select>
+      </div>
+    </div>
+    <div class="app-shell">
+      <nav class="sidebar">
+        <p class="sidebar-heading">People Ops</p>
+        <button class="sidebar-item" data-screen="Employee Directory" onclick="gotoScreen(this.dataset.screen)">
+          <span class="sidebar-icon">🗂️</span><span class="sidebar-label">Employee Directory</span>
+        </button>
+        <button class="sidebar-item" data-screen="Audit Log" onclick="gotoScreen(this.dataset.screen)">
+          <span class="sidebar-icon">🕘</span><span class="sidebar-label">Audit Log</span>
+        </button>
+        <button class="sidebar-item active" data-screen="Access Rules" onclick="gotoScreen(this.dataset.screen)">
+          <span class="sidebar-icon">🛡️</span><span class="sidebar-label">Access Rules</span>
+        </button>
+      </nav>
+      <main class="main">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Access rules</h1>
+            <p class="page-subtitle">Reference for what each role can read and write. Your current role's column is underlined.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table matrix-table">
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th id="col-admin">HR Admin</th>
+                <th id="col-manager">Manager</th>
+                <th id="col-employee">Employee</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Read own record</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><td>Read immediate direct reports' records</td><td class="yes">✓</td><td class="yes">✓</td><td class="no">✕</td></tr>
+              <tr><td>Read downstream reports (reports of reports)</td><td class="yes">✓</td><td class="no">✕</td><td class="no">✕</td></tr>
+              <tr><td>Read any other employee's record</td><td class="yes">✓</td><td class="no">✕</td><td class="no">✕</td></tr>
+              <tr><td>Read archived / offboarded records</td><td class="yes">✓</td><td class="no">✕</td><td class="no">✕</td></tr>
+              <tr><td>Update any employee record</td><td class="yes">✓</td><td class="no">✕</td><td class="no">✕</td></tr>
+              <tr><td>View audit log</td><td class="yes">✓</td><td class="no">✕</td><td class="no">✕</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const fixture = JSON.parse(document.getElementById('fixture-data').textContent);
+  const employeesById = Object.fromEntries(fixture.employees.map(e => [e.id, e]));
+  let currentRoleKey = 'admin';
+  let auditLog = fixture.auditLog.slice();
+  let selectedRecordId = null;
+  let editingId = null;
+
+  function currentUser() {
+    return employeesById[fixture.roles[currentRoleKey].userId];
+  }
+
+  function directReports(managerId) {
+    return fixture.employees.filter(e => e.managerId === managerId);
+  }
+
+  function visibleEmployees() {
+    if (currentRoleKey === 'admin') return fixture.employees.slice();
+    const me = currentUser();
+    if (currentRoleKey === 'manager') {
+      const reportIds = new Set(directReports(me.id).map(e => e.id));
+      return fixture.employees.filter(e => e.id === me.id || reportIds.has(e.id));
+    }
+    return fixture.employees.filter(e => e.id === me.id);
+  }
+
+  function canRead(id) {
+    return visibleEmployees().some(e => e.id === id);
+  }
+
+  function formatDate(iso) {
+    const d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  function formatTimestamp(iso) {
+    const d = new Date(iso);
+    return d.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  // ---- Role switching ----
+  function setRole(key) {
+    currentRoleKey = key;
+    document.querySelectorAll('.role-select').forEach(sel => { sel.value = key; });
+    renderAll();
+  }
+
+  function renderAll() {
+    renderDirectory();
+    renderRecordScreen();
+    renderAuditScreen();
+    highlightAccessRules();
+  }
+
+  // ---- Directory ----
+  function scopeNote() {
+    if (currentRoleKey === 'admin') {
+      return `Showing all ${fixture.employees.length} employee records, including archived/offboarded.`;
+    }
+    if (currentRoleKey === 'manager') {
+      const reports = directReports(currentUser().id);
+      return `Showing your record and your ${reports.length} direct report${reports.length === 1 ? '' : 's'}. Records of their reports are not shown.`;
+    }
+    return 'Showing your own record only.';
+  }
+
+  function rowHtml(e) {
+    const statusChip = e.status === 'Archived'
+      ? '<span class="chip chip--muted">▢ Archived</span>'
+      : '<span class="chip">● Active</span>';
+    return `<tr>
+      <td>${e.name}</td>
+      <td>${e.title}</td>
+      <td>${e.team}</td>
+      <td>${statusChip}</td>
+      <td><button class="link-action" onclick="openRecord('${e.id}')">View record →</button></td>
+    </tr>`;
+  }
+
+  function renderDirectory() {
+    const loading = document.getElementById('directory-loading');
+    const wrap = document.getElementById('directory-table-wrap');
+    if (!loading || !wrap) return;
+    loading.style.display = 'block';
+    wrap.style.display = 'none';
+    setTimeout(() => {
+      document.getElementById('directory-rows').innerHTML = visibleEmployees().map(rowHtml).join('');
+      document.getElementById('directory-scope-note').textContent = scopeNote();
+      loading.style.display = 'none';
+      wrap.style.display = 'block';
+    }, 250);
+  }
+
+  function lookupRecord() {
+    const id = document.getElementById('lookup-input').value.trim();
+    if (!id) return;
+    openRecord(id);
+  }
+
+  function openRecord(id) {
+    selectedRecordId = id;
+    gotoScreen('Employee Record');
+    renderRecordScreen();
+  }
+
+  // ---- Record detail ----
+  function showRecordState(key) {
+    document.querySelectorAll('.record-state').forEach(el => {
+      el.style.display = (el.id === 'record-state-' + key) ? 'block' : 'none';
+    });
+  }
+
+  function denialReason(emp) {
+    if (currentRoleKey === 'employee') {
+      return `You can only view your own employee record. "${emp.name}" is not visible to your role.`;
+    }
+    if (currentRoleKey === 'manager') {
+      return `"${emp.name}" is not you or one of your immediate direct reports, so this record is not visible to your role. Managers cannot see reports of their reports.`;
+    }
+    return 'This record is not visible to your role.';
+  }
+
+  function renderRecordScreen() {
+    const label = document.getElementById('record-role-label');
+    if (!label) return;
+    label.textContent = fixture.roles[currentRoleKey].label;
+
+    if (!selectedRecordId) { showRecordState('empty'); return; }
+
+    showRecordState('loading');
+    setTimeout(() => {
+      const emp = employeesById[selectedRecordId];
+      if (!emp) {
+        document.getElementById('notfound-message').textContent = `No employee found with ID "${selectedRecordId}".`;
+        showRecordState('notfound');
+        return;
+      }
+      if (!canRead(emp.id)) {
+        document.getElementById('denied-message').textContent = denialReason(emp);
+        showRecordState('denied');
+        return;
+      }
+      populateView(emp);
+      showRecordState('view');
+    }, 300);
+  }
+
+  function populateView(emp) {
+    document.getElementById('record-name').textContent = emp.name;
+    document.getElementById('record-id-line').textContent = `${emp.id} · ${emp.email}`;
+    document.getElementById('record-title').textContent = emp.title;
+    document.getElementById('record-team').textContent = emp.team;
+    document.getElementById('record-band').textContent = emp.band;
+    document.getElementById('record-email').textContent = emp.email;
+    document.getElementById('record-start').textContent = formatDate(emp.startDate);
+    document.getElementById('record-status').textContent = emp.status === 'Archived' ? 'Archived / offboarded' : 'Active';
+    document.getElementById('record-archived-banner').style.display = emp.status === 'Archived' ? 'flex' : 'none';
+
+    const editBtn = document.getElementById('record-edit-btn');
+    const note = document.getElementById('record-access-note');
+    if (currentRoleKey === 'admin') {
+      editBtn.style.display = 'inline-flex';
+      editBtn.textContent = 'Edit record';
+      editBtn.onclick = () => enterEditMode(emp.id);
+      note.textContent = 'HR Admins can update any record, including archived ones. Changes are written to the audit log.';
+    } else if (currentRoleKey === 'manager') {
+      editBtn.style.display = 'none';
+      note.textContent = emp.id === currentUser().id
+        ? 'Read-only — you can view your own record.'
+        : "Read-only — you can view your direct reports' records but cannot edit them.";
+    } else {
+      editBtn.style.display = 'inline-flex';
+      editBtn.textContent = 'Edit record';
+      editBtn.onclick = () => enterRejectedMode(emp.id);
+      note.textContent = 'Employees have read access to their own record only.';
+    }
+  }
+
+  function enterEditMode(id) {
+    const emp = employeesById[id];
+    editingId = id;
+    document.getElementById('edit-name').textContent = emp.name;
+    document.getElementById('edit-title').value = emp.title;
+    document.getElementById('edit-team').value = emp.team;
+    document.getElementById('edit-band').value = emp.band;
+    showRecordState('edit');
+  }
+
+  function cancelEdit() {
+    showRecordState('view');
+  }
+
+  function saveRecord() {
+    const saveBtn = document.getElementById('save-btn');
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving…';
+    const emp = employeesById[editingId];
+    const newTitle = document.getElementById('edit-title').value.trim();
+    const newTeam = document.getElementById('edit-team').value.trim();
+    const newBand = document.getElementById('edit-band').value.trim();
+
+    setTimeout(() => {
+      const actor = `${currentUser().name} (HR Admin)`;
+      const now = new Date().toISOString();
+      const changes = [
+        ['Job title', emp.title, newTitle],
+        ['Team', emp.team, newTeam],
+        ['Compensation band', emp.band, newBand],
+      ].filter(([, prev, next]) => prev !== next && next !== '');
+
+      changes.forEach(([field, prev, next]) => {
+        auditLog.unshift({ timestamp: now, employeeId: emp.id, employeeName: emp.name, field, previousValue: prev, newValue: next, actor });
+      });
+      changes.forEach(([field, , next]) => {
+        if (field === 'Job title') emp.title = next;
+        if (field === 'Team') emp.team = next;
+        if (field === 'Compensation band') emp.band = next;
+      });
+
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Save changes';
+      populateView(emp);
+      showRecordState('view');
+
+      const toast = document.getElementById('record-toast');
+      const msg = document.getElementById('record-toast-message');
+      msg.textContent = changes.length
+        ? `Update saved — ${changes.length} field${changes.length > 1 ? 's' : ''} changed. Previous value, actor and timestamp were recorded in the audit log.`
+        : 'No changes to save.';
+      toast.style.display = 'inline-flex';
+      renderAuditScreen();
+    }, 350);
+  }
+
+  function enterRejectedMode(id) {
+    const emp = employeesById[id];
+    document.getElementById('rejected-name').textContent = emp.name;
+    document.getElementById('rejected-title').value = emp.title;
+    document.getElementById('rejected-team').value = emp.team;
+    document.getElementById('rejected-band').value = emp.band;
+    showRecordState('rejected');
+  }
+
+  // ---- Audit log ----
+  function renderAuditScreen() {
+    const denied = document.getElementById('audit-denied');
+    const loading = document.getElementById('audit-loading');
+    const content = document.getElementById('audit-content');
+    if (!denied || !loading || !content) return;
+
+    if (currentRoleKey !== 'admin') {
+      loading.style.display = 'none';
+      content.style.display = 'none';
+      denied.style.display = 'block';
+      return;
+    }
+    denied.style.display = 'none';
+    loading.style.display = 'block';
+    content.style.display = 'none';
+    setTimeout(() => {
+      const rows = auditLog.map(a => `<tr>
+        <td>${formatTimestamp(a.timestamp)}</td>
+        <td>${a.employeeName}</td>
+        <td>${a.field}</td>
+        <td>${a.previousValue}</td>
+        <td>${a.newValue}</td>
+        <td>${a.actor}</td>
+      </tr>`).join('');
+      document.getElementById('audit-rows').innerHTML = rows;
+      loading.style.display = 'none';
+      content.style.display = 'block';
+    }, 250);
+  }
+
+  // ---- Access rules ----
+  function highlightAccessRules() {
+    ['admin', 'manager', 'employee'].forEach(key => {
+      const th = document.getElementById('col-' + key);
+      if (!th) return;
+      const base = { admin: 'HR Admin', manager: 'Manager', employee: 'Employee' }[key];
+      th.classList.toggle('current-role-col', key === currentRoleKey);
+      th.innerHTML = key === currentRoleKey
+        ? `${base} <span class="chip chip--tag">You</span>`
+        : base;
+    });
+  }
+
+  // ---- Navigation between screens ----
+  function gotoScreen(name) {
+    const idx = Array.from(document.querySelectorAll('.screen')).findIndex(s => s.dataset.name === name);
+    if (idx >= 0 && window.__show) window.__show(idx);
+  }
+
+  const screens = Array.from(document.querySelectorAll('.screen'));
+  let cur = 0;
+  function show(i) {
+    cur = Math.max(0, Math.min(screens.length - 1, i));
+    screens.forEach((s, j) => s.style.display = j === cur ? 'block' : 'none');
+    document.getElementById('screen-label').textContent =
+      `${cur + 1} / ${screens.length}: ${screens[cur].dataset.name}`;
+  }
+  window.__show = show;
+  document.getElementById('prev-btn').onclick = () => show(cur - 1);
+  document.getElementById('next-btn').onclick = () => show(cur + 1);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') show(cur + 1);
+    if (e.key === 'ArrowLeft') show(cur - 1);
+  });
+  show(0);
+  renderAll();
+</script>
+
+</body>
+</html>
+
+<!-- arc:css-inlined -->
