@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design System Style Guide</title>
+  <link rel="stylesheet" href="tokens.css" />
+  <link rel="stylesheet" href="prototype-utils.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: var(--space-4);
+      background-color: var(--color-bg);
+      color: var(--color-fg);
+      font-family: var(--font-family-base);
+      line-height: var(--line-height-base);
+    }
+    section {
+      margin-bottom: var(--space-4);
+    }
+    h1 {
+      font-size: calc(var(--font-size-lg) * 1.4);
+    }
+    h2 {
+      font-size: var(--font-size-lg);
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: var(--space-1);
+    }
+    .swatch-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+    .swatch {
+      width: 140px;
+    }
+    .swatch-color {
+      height: 64px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+    }
+    .swatch-label {
+      font-size: var(--font-size-sm);
+      margin-top: var(--space-1);
+    }
+    .dimension-bar {
+      background-color: var(--color-primary);
+      height: 8px;
+    }
+    .row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-2);
+    }
+    .row-label {
+      width: 140px;
+      font-size: var(--font-size-sm);
+    }
+    .component-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+    .form-example {
+      max-width: 320px;
+    }
+    .type-sample {
+      margin-bottom: var(--space-2);
+    }
+  </style>
+</head>
+<body>
+  <h1>Design System Style Guide</h1>
+
+  <section>
+    <h2>Colors</h2>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background-color: var(--color-fg);"></div>
+        <div class="swatch-label">color-fg</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background-color: var(--color-bg);"></div>
+        <div class="swatch-label">color-bg</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background-color: var(--color-primary);"></div>
+        <div class="swatch-label">color-primary</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background-color: var(--color-border);"></div>
+        <div class="swatch-label">color-border</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Spacing</h2>
+    <div class="row">
+      <div class="row-label">space-1</div>
+      <div class="dimension-bar" style="width: var(--space-1);"></div>
+    </div>
+    <div class="row">
+      <div class="row-label">space-2</div>
+      <div class="dimension-bar" style="width: var(--space-2);"></div>
+    </div>
+    <div class="row">
+      <div class="row-label">space-3</div>
+      <div class="dimension-bar" style="width: var(--space-3);"></div>
+    </div>
+    <div class="row">
+      <div class="row-label">space-4</div>
+      <div class="dimension-bar" style="width: var(--space-4);"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Radii</h2>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background-color: var(--color-primary); border-radius: var(--radius-sm);"></div>
+        <div class="swatch-label">radius-sm</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background-color: var(--color-primary); border-radius: var(--radius-md);"></div>
+        <div class="swatch-label">radius-md</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background-color: var(--color-primary); border-radius: var(--radius-lg);"></div>
+        <div class="swatch-label">radius-lg</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Type scale</h2>
+    <div class="type-sample" style="font-size: var(--font-size-sm);">font-size-sm — The quick brown fox jumps over the lazy dog</div>
+    <div class="type-sample" style="font-size: var(--font-size-md);">font-size-md — The quick brown fox jumps over the lazy dog</div>
+    <div class="type-sample" style="font-size: var(--font-size-lg);">font-size-lg — The quick brown fox jumps over the lazy dog</div>
+    <div class="type-sample" style="font-weight: var(--font-weight-regular);">font-weight-regular — Regular weight text</div>
+    <div class="type-sample" style="font-weight: var(--font-weight-bold);">font-weight-bold — Bold weight text</div>
+    <div class="type-sample">font-family-base — <span style="font-family: var(--font-family-base);">Inter, system-ui, sans-serif</span></div>
+  </section>
+
+  <section>
+    <h2>Shadow</h2>
+    <div class="swatch">
+      <div class="swatch-color" style="background-color: var(--color-bg); box-shadow: var(--shadow-sm);"></div>
+      <div class="swatch-label">shadow-sm</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Buttons</h2>
+    <div class="component-row">
+      <button class="btn btn-primary">Primary button</button>
+      <button class="btn btn-secondary">Secondary button</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Card</h2>
+    <div class="component-row">
+      <div class="card" style="max-width: 320px;">
+        <h3 class="card-title">Card title</h3>
+        <p class="card-body">This is a card body demonstrating card.default tokens for background, foreground, border, and radius.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Chips</h2>
+    <div class="component-row">
+      <span class="chip">Default chip</span>
+      <span class="chip">Another chip</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Form controls</h2>
+    <div class="form-example">
+      <label class="label" for="example-input">Label</label>
+      <input class="input" id="example-input" type="text" placeholder="Placeholder text" />
+    </div>
+  </section>
+
+  <section>
+    <h2>UI guidelines</h2>
+
+    <h3>Navigation</h3>
+    <p>Left sidebar with three sections — Test Cases, Test Runs, Reports — because QA work is organized around these three persistent objects and users pivot between them constantly during a session. No top bar beyond a slim header for account/workspace switching, since it would compete with the sidebar for the same job.</p>
+
+    <h3>Layout and density</h3>
+    <p>Data-dense console layout: tables and lists are the default surface, with generous use of <code>chip</code> for statuses (pass/fail/blocked) so a screen can convey many results at a glance. Below 960px, the sidebar collapses to icons-only, since QA engineers primarily work on wide monitors and mobile is a secondary, glance-only context.</p>
+
+    <h3>Component usage</h3>
+    <ul>
+      <li>Use <code>card</code> for a single test case's detail view or a run summary — one focal record, not a collection.</li>
+      <li>Use a table for any list of test cases, runs, or results — these are inherently tabular and benefit from column scanning.</li>
+      <li>Use <code>chip</code> strictly for status/state labels (pass, fail, skipped, flaky), never for navigation or actions, so status meaning stays unambiguous.</li>
+      <li>Use <code>btn-primary</code> for the single most important action per screen (e.g. "Run tests"); every other action is <code>btn-secondary</code>, so users always know the one recommended next step.</li>
+      <li>Use <code>input</code>/<code>label</code> pairs for all filters and forms rather than ad hoc controls, so filtering behaves identically everywhere.</li>
+    </ul>
+
+    <h3>Theme</h3>
+    <p>Light theme only, by default. QA dashboards are typically viewed on shared monitors during standups and in screenshots pasted into tickets, where a consistent light background reads clearly regardless of the room or player.</p>
+
+    <h3>Voice and tone</h3>
+    <p>Direct and factual, like a test log: state what happened ("3 tests failed", "Run completed"), not how the user should feel about it. Avoid exclamation points and celebratory copy — a QA tool reports status, it doesn't cheer.</p>
+  </section>
+</body>
+</html>
