@@ -186,5 +186,30 @@
       <input class="input" id="example-input" type="text" placeholder="Placeholder text" />
     </div>
   </section>
+
+  <section>
+    <h2>UI guidelines</h2>
+
+    <h3>Navigation</h3>
+    <p>Left sidebar with three sections — Test Cases, Test Runs, Reports — because QA work is organized around these three persistent objects and users pivot between them constantly during a session. No top bar beyond a slim header for account/workspace switching, since it would compete with the sidebar for the same job.</p>
+
+    <h3>Layout and density</h3>
+    <p>Data-dense console layout: tables and lists are the default surface, with generous use of <code>chip</code> for statuses (pass/fail/blocked) so a screen can convey many results at a glance. Below 960px, the sidebar collapses to icons-only, since QA engineers primarily work on wide monitors and mobile is a secondary, glance-only context.</p>
+
+    <h3>Component usage</h3>
+    <ul>
+      <li>Use <code>card</code> for a single test case's detail view or a run summary — one focal record, not a collection.</li>
+      <li>Use a table for any list of test cases, runs, or results — these are inherently tabular and benefit from column scanning.</li>
+      <li>Use <code>chip</code> strictly for status/state labels (pass, fail, skipped, flaky), never for navigation or actions, so status meaning stays unambiguous.</li>
+      <li>Use <code>btn-primary</code> for the single most important action per screen (e.g. "Run tests"); every other action is <code>btn-secondary</code>, so users always know the one recommended next step.</li>
+      <li>Use <code>input</code>/<code>label</code> pairs for all filters and forms rather than ad hoc controls, so filtering behaves identically everywhere.</li>
+    </ul>
+
+    <h3>Theme</h3>
+    <p>Light theme only, by default. QA dashboards are typically viewed on shared monitors during standups and in screenshots pasted into tickets, where a consistent light background reads clearly regardless of the room or player.</p>
+
+    <h3>Voice and tone</h3>
+    <p>Direct and factual, like a test log: state what happened ("3 tests failed", "Run completed"), not how the user should feel about it. Avoid exclamation points and celebratory copy — a QA tool reports status, it doesn't cheer.</p>
+  </section>
 </body>
 </html>

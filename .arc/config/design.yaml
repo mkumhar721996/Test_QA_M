@@ -3,3 +3,4 @@ design_system:
   assets:
     tokens: tokens.css
     prototype_utils: prototype-utils.css
+    ui_guidelines: UI-GUIDELINES.md
