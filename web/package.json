@@ -1,0 +1,11 @@
+{
+  "name": "defect-tracker-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test --test-reporter spec tests/**/*.test.js"
+  }
+}
