@@ -1,0 +1,11 @@
+{
+  "name": "defect-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Defect tracking domain model, validation, and API",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test"
+  }
+}
